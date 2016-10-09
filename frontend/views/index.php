@@ -1,0 +1,1 @@
+<?php include(Yii::getAlias('@webroot') . '/dist/index.html'); ?>
