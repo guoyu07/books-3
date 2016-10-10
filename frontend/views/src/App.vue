@@ -42,9 +42,16 @@
         methods    : {
             initList : function() {
                 var self = this;
-                self.$http.get('/book/53855a750ac0b3a41e00c7e6').then(function(res) {
-                    console.log(JSON.parse(JSON.stringify(res.data)));
-                    self.book = res.data;
+                self.$http.get('/api/source/cover').then(function(res) {
+//                    var data = JSON.parse(res.data);
+                    var data = res.data;
+                    if(data.code == 200) {
+                        console.log(11);
+
+                    } else {
+                        console.log(data)
+                    }
+//                    self.book = res.data;
                 })
             }
         }

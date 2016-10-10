@@ -20,20 +20,10 @@ module.exports = {
         env                : require('./dev.env'),
         port               : 10080,
         assetsSubDirectory : '',
-        assetsPublicPath   : '/dist/',
+        assetsPublicPath   : '/',
         proxyTable         : {
-            '/book'     : {
-                target       : 'http://api.zhuishushenqi.com',
-                changeOrigin : true,
-                pathRewrite  : {}
-            },
-            '/mix-atoc' : {
-                target       : 'http://api.zhuishushenqi.com',
-                changeOrigin : true,
-                pathRewrite  : {}
-            },
-            '/chapter'  : {
-                target       : 'http://chapter2.zhuishushenqi.com',
+            '/api'     : {
+                target       : 'http://books.host',
                 changeOrigin : true,
                 pathRewrite  : {}
             }

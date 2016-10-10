@@ -15,6 +15,10 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+            'charset' => 'UTF-8',
+        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
@@ -40,6 +44,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'api/<controller:\w+>/<action>' => '<controller>/<action>',
+                '<controller:\w+>/<action>' => 'site/index',
             ],
         ],
     ],
