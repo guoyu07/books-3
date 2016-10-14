@@ -19,4 +19,11 @@ class Input
         }
         return $data;
     }
+
+    public static function getParam($name, $defaultValue = null)
+    {
+        $result = Yii::$app->request->getQueryParam($name, $defaultValue);
+
+        return $result;
+    }
 }

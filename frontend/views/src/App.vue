@@ -1,95 +1,101 @@
 <template>
     <div id="app">
-        <img class="logo" src="./assets/logo.png">
-        <hello></hello>
-        <p>
-            Welcome to your Vue.js app1111!
-        </p>
-        <p>
-            To get a better understanding of how this boilerplate works, check out
-            <a href="http://vuejs-templates.github.io/webpack" target="_blank">its documentation</a>.
-            It is also recommended to go through the docs for
-            <a href="http://webpack.github.io/" target="_blank">Webpack</a> and
-            <a href="http://vuejs.github.io/vue-loader/" target="_blank">vue-loader</a>.
-            If you have any issues with the setup, please file an issue at this boilerplate's
-            <a href="https://github.com/vuejs-templates/webpack" target="_blank">repository</a>.
-        </p>
-        <p>
-            You may also want to checkout
-            <a href="https://github.com/vuejs/vue-router/" target="_blank">vue-router</a> for routing and
-            <a href="https://github.com/vuejs/vuex/" target="_blank">vuex</a> for state management.
-        </p>
+        <router-view></router-view>
     </div>
 </template>
-
+<style>
+    *,
+    *::before,
+    *::after {
+        margin                      : 0;
+        padding                     : 0;
+        box-sizing                  : border-box;
+        -webkit-tap-highlight-color : rgba(0, 0, 0, 0);
+    }
+    html, body {
+        height                 : 100%;
+        line-height            : 1.3;
+        color                  : #333;
+        font-family            : FreeSans, Arimo, "Droid Sans", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing : antialiased;
+        text-rendering         : optimizeLegibility;
+    }
+    html .pure-g [class *="pure-u"] {
+        font-family : FreeSans, Arimo, "Droid Sans", Helvetica, Arial, sans-serif;
+    }
+    ul, ol { list-style : none; }
+    em { font-style : normal; }
+    .card-shadow { box-shadow : 0 3px 8px -3px rgba(0, 0, 0, .5); }
+    /*1em = 16px 1rem = 16px*/
+</style>
 <script>
-    import Hello from './components/Hello'
-
     module.exports = {
-        data       : function() {
-            return {
-                book : {}
-            }
+        data () {
+            return {}
         },
-        components : {
-            Hello
-        },
-        created   : function() {
+        components : {},
+        created () {
             var self = this;
-            console.log('__________complied');
-            self.initList();
         },
-        methods    : {
-            initList : function() {
-                var self = this;
-                self.$http.get('/api/source/cover').then(function(res) {
-//                    var data = JSON.parse(res.data);
-                    var data = res.data;
-                    if(data.code == 200) {
-                        console.log(11);
+        methods    : {}
+    };
+    function pad(n) {
+        return n < 10 ? '0' + n : n
+    }
 
-                    } else {
-                        console.log(data)
-                    }
-//                    self.book = res.data;
-                })
-            }
-        }
+    Date.prototype.format = function(safari) {
+        var split = !!safari ? '/' : '-';
+        return this.getFullYear() + split
+               + pad(this.getMonth() + 1) + split
+               + pad(this.getDate()) + ' '
+               + pad(this.getHours()) + ':'
+               + pad(this.getMinutes()) + ':'
+               + pad(this.getSeconds());
     };
 
-//    export default {
-//        complied : function() {
-//            console.log("11");
-//        },
-//        components : {
-//            Hello
-//        }
-//    }
-</script>
+    Date.prototype.getDateStr = function(safari) {
+        var split = !!safari ? '/' : '-';
+        return this.getFullYear() + split
+               + pad(this.getMonth() + 1) + split
+               + pad(this.getDate());
+    };
 
-<style>
-    html {
-        height : 100%;
-    }
-    body {
-        display         : flex;
-        align-items     : center;
-        justify-content : center;
-        height          : 100%;
-    }
-    #app {
-        color       : #2c3e50;
-        margin-top  : -100px;
-        max-width   : 600px;
-        font-family : Source Sans Pro, Helvetica, sans-serif;
-        text-align  : center;
-    }
-    #app a {
-        color           : #42b983;
-        text-decoration : none;
-    }
-    .logo {
-        width  : 100px;
-        height : 100px
-    }
-</style>
+    Date.prototype.addHours = function(h) {
+        this.setHours(this.getHours() + h);
+        return this;
+    };
+
+    Date.prototype.addMinutes = function(m) {
+        this.setMinutes(this.getMinutes() + m);
+        return this;
+    };
+
+    Date.prototype.addDays = function(d) {
+        this.setDate(this.getDate() + d);
+        return this;
+    };
+
+    Date.prototype.addWeeks = function(w) {
+        this.addDays(w * 7);
+        return this;
+    };
+
+    Date.prototype.addMonths = function(m) {
+        var d = this.getDate();
+        this.setMonth(this.getMonth() + m);
+        if(this.getDate() < d) {
+            this.setDate(0);
+        }
+        return this;
+    };
+
+    Date.prototype.addYears = function(y) {
+        var m = this.getMonth();
+        this.setFullYear(this.getFullYear() + y);
+
+        if(m < this.getMonth()) {
+            this.setDate(0);
+        }
+        return this;
+    };
+</script>
