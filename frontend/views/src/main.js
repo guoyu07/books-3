@@ -26,7 +26,7 @@ const router = new VueRouter({
             component : require('./chapter/chapter.vue'),
         },
         {
-            path : '/book/:book_id/:chap_index',
+            path : '/book/:book_id',
             name:'reader',
             component : require('./reader/reader.vue'),
         }

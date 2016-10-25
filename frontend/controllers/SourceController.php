@@ -13,6 +13,8 @@ use yii\web\Controller;
 class SourceController extends Controller
 {
 
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -25,17 +27,35 @@ class SourceController extends Controller
         ];
     }
 
-    public function actionCover()
+    public function actionBookList()
     {
-//        $book_id = Input::getParam('book_id');
-        $book_id = '53855a750ac0b3a41e00c7e6';
-
-        $info = $this->getBookInfo($book_id);
-        if(!empty($info)) {
-            Output::normal(200, '获取成功', $info);
-        } else {
-            Output::normal(400, '获取失败');
+        $data = Input::post();
+        $ids = $data['ids'];
+        $info_list = [];
+        foreach ($ids as $id) {
+            $info = $this->getBookInfo($id);
+            if(!empty($info)) {
+                $info_list[] = $info;
+            }
         }
+        Output::simple($info_list);
+    }
+
+    public function actionChapter()
+    {
+        $data = Input::post();
+        $book_id = $data['book_id'];
+        $chapter_index = $data['chapter_index'];
+        $content_url = $data['content_url'];
+        if (empty($content_url)) {
+            $chapters = $this->getChapters($book_id);
+            if(!empty($chapters)){
+                $chapter = $chapters[$chapter_index];
+                $content_url = $chapter['link'];
+            }
+        }
+        $content = $this->getContent($content_url);
+        Output::simple($content);
     }
 
     private function getBookInfo($book_id)
@@ -50,7 +70,7 @@ class SourceController extends Controller
 
     private function getChapters($book_id)
     {
-        $result = HTTPRequest::request('http://api.zhuishushenqi.com/mix-atoc/'. $book_id.'?view=chapters');
+        $result = HTTPRequest::request('http://api.zhuishushenqi.com/mix-ctoc/'. $book_id.'?view=chapters');
         if($result['status'] == 'OK') {
             $content = json_decode($result['content'], 471);
             if($content['ok']) {
@@ -60,15 +80,27 @@ class SourceController extends Controller
         return [];
     }
 
-    public function actionChapter()
+    private function getContent($content_url)
     {
-        $book_id = Input::getParam('book_id');
-        $info = $this->getBookInfo($book_id);
-        $chapters = $this->getChapters($book_id);
-        $result['title'] = $info['title'];
-        $result['chapters'] = array_reverse($chapters);
-        Output::normal(200, '获取成功', $result);
+        $result = HTTPRequest::request('http://api.zhuishushenqi.com/chapter/'. urlencode($content_url));
+        if($result['status'] == 'OK') {
+            $content = json_decode($result['content'], 471);
+            if($content['ok']) {
+                return $content['chapter'];
+            }
+        }
+        return [];
     }
+
+//    public function actionChapter()
+//    {
+//        $book_id = Input::getParam('book_id');
+//        $info = $this->getBookInfo($book_id);
+//        $chapters = $this->getChapters($book_id);
+//        $result['title'] = $info['title'];
+//        $result['chapters'] = array_reverse($chapters);
+//        Output::normal(200, '获取成功', $result);
+//    }
 
     public function actionReader()
     {

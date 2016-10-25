@@ -7,6 +7,12 @@ use yii\web\Response;
 
 class Output
 {
+
+    public static function simple($data = array())
+    {
+        Output::normal(200, '获取成功', $data);
+    }
+
     public static function normal($code = 200, $msg = 'OK', $data = array())
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
